@@ -1,0 +1,68 @@
+{
+    "base": "kurs_test",
+    "schedule": "collection_schedule",
+    "steps": [
+        {
+            "action": [
+                "prony_test_complex.signals",
+                "TwoSimpleTestSignal"
+            ]
+        },
+        {
+            "action": [
+                "prony_test_complex.steps",
+                "SimpleOffset"
+            ]
+        },
+        {
+            "action": [
+                "prony_test_complex.steps",
+                "Noise"
+            ],
+            "required_parameter": "sigma_k",
+            "cached": [
+                "sigma_k"
+            ]
+        },
+        {
+            "action": [
+                "prony_test_complex.steps",
+                "ComponentsCount"
+            ],
+            "required_parameter": "p"
+        },
+        {
+            "action": [
+                "prony_test_complex.steps",
+                "ComputingFilter"
+            ],
+            "required_parameter": "method"
+        },
+        {
+            "action": [
+                "prony_test_complex.steps",
+                "Epsilon"
+            ]
+        },
+        {
+            "action": [
+                "prony_test_complex.steps",
+                "Save"
+            ]
+        }
+    ],
+    "parameters": {
+        "range": [
+            -15.707963267948966,
+            15.707963267948966
+        ],
+        "size": 800,
+        "ex_ts": 20,
+        "prony": 20
+    },
+    "steps_parameters": {
+        "sigma_k": "collection_sigma_k",
+        "p": "collection_p",
+        "method": "collection_method"
+    }
+}
