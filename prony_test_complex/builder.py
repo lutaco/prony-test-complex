@@ -1,12 +1,10 @@
-from pymongo import MongoClient
 from itertools import product, count
+from .clien import client
 
 
 class Builder(object):
 
     def __init__(self, base, settings=None):
-        client = MongoClient()
-        client.drop_database(base)
         self.db = client[base]
         self.base = base
         self.steps = []

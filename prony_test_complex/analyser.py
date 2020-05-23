@@ -1,8 +1,8 @@
 import json
 import numpy as np
-from pymongo import MongoClient
 from collections import namedtuple
 from itertools import zip_longest
+from .clien import client
 
 
 ALL_TYPE = 'ALL_TYPE'
@@ -15,7 +15,6 @@ class Analyser(object):
 
     def __init__(self, solution):
         self.solution = json.loads(solution)
-        client = MongoClient()
         self.base = client[self.solution['base']]
 
     def aggregate(self, *params):

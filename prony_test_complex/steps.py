@@ -48,35 +48,25 @@ class EasyParametersMixin(ABC):
         return ({self.representative: x} for x in self.parameters)
 
 
-class SetSize(EasyParametersMixin, RangeStep):
-
-    representative = 'size'
+class CreateSignal(Step):
 
     @classmethod
-    def step(cls, data, params):
-        return {'size': params['size']}
-
-
-class Offset(EasyParametersMixin, RangeStep):
-
-    representative = 'offset'
-
-    @classmethod
-    def step(cls, data, params):
-        offset = params['offset'] * np.pi
-        numbers = np.linspace(*map(lambda x: x + offset, data['range']), data['size'])
-        source = data['start_signal'](numbers)
+    def step(cls, data):
+        left, right = data['range']
+        t = np.linspace(left, right, int((right - left) * data['fs']))
+        source = data['start_signal'](t)
         return {'source': source}
 
 
 class Noise(EasyParametersMixin, RangeStep):
 
-    representative = 'sigma_k'
+    representative = 'snr'
 
     @classmethod
     def step(cls, data, params):
         signal = data['source']
-        noise = np.random.normal(0, params['sigma_k'] * max(signal), len(signal))
+        noise_m = params['snr'] * np.sqrt(signal.dot(signal) / len(signal))
+        noise = np.random.normal(0, noise_m, len(signal))
         res = signal + noise
         return {'signal': res}
 
@@ -88,12 +78,10 @@ class Filters(EasyParametersMixin, RangeStep):
     @classmethod
     def step(cls, data, params):
         result = pickle.loads(params['shortcut'])(data)
-        if isinstance(result, dict):
-            return result
         return {'signal': result}
 
     def get_parameters(self):
-        return ({'filter': x[0], 'shortcut': pickle.dumps(x[1])} for x in self.parameters)
+        return ({'filter': name, 'shortcut': pickle.dumps(flt)} for name, flt in self.parameters)
 
 
 class Decimation(EasyParametersMixin, RangeStep):
@@ -102,7 +90,11 @@ class Decimation(EasyParametersMixin, RangeStep):
 
     @classmethod
     def step(cls, data, params):
-        return {'signal': data['signal'][::params['step']], 'dec_step': params['step']}
+        new_fs = data['fs'] / params['step']
+        return {
+            'signal': data['signal'][::params['step']],
+            'fs': new_fs, 'source': data['source'][::params['step']]
+        }
 
 
 class ComponentsCount(EasyParametersMixin, RangeStep):
@@ -121,18 +113,15 @@ class Computing(EasyParametersMixin, RangeStep):
     @classmethod
     def step(cls, data, params):
         try:
-            left, right = data['range']
-            ts = np.abs(right - left) / len(data['signal']) / (2 * np.pi)
             signal = data['signal']
 
             p = data['p']
             if data.get('relative', False):
-                p = data['p'] * len(signal) // 100
+                p = data['p'] * len(signal) // 200
 
             result = pickle.loads(
-                params['approximate'])(signal[np.newaxis].transpose(), p, ts)
-
-        except (IOError, LinAlgError):
+                params['approximate'])(signal[np.newaxis].transpose(), int(p), 1 / data['fs'])
+        except:
             result = None
 
         return {'success': bool(result), 'result': None if not result else {
@@ -140,7 +129,10 @@ class Computing(EasyParametersMixin, RangeStep):
         }}
 
     def get_parameters(self):
-        return ({'method': x[0], 'approximate': pickle.dumps(x[1])} for x in self.parameters)
+        return (
+            {'method': name, 'approximate': pickle.dumps(method)}
+            for name, method in self.parameters
+        )
 
 
 class Epsilon(Step):
@@ -166,12 +158,3 @@ class Save(Step):
             'signal': data['signal'].dumps(),
             'params': list(map(lambda x: x.dumps(), data['result']['params'])),
         }}
-
-
-class SimpleOffset(Step):
-
-    @classmethod
-    def step(cls, data):
-        numbers = np.linspace(*data['range'], data['size'])
-        source = data['start_signal'](numbers)
-        return {'source': source}

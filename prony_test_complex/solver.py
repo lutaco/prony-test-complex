@@ -4,10 +4,10 @@ import time
 import pickle
 from itertools import count
 from collections import deque, defaultdict
-from pymongo import MongoClient
 from functools import reduce
 from numpy import average
 from datetime import datetime, timedelta
+from .clien import client
 
 
 class StepCache(object):
@@ -51,8 +51,6 @@ class Solver(object):
 
         solution = json.loads(solution)
         self.solution = solution
-
-        client = MongoClient()
         self.base = client[solution['base']]
 
         self.count_documents = self.base[self.solution['schedule']].count_documents({})
