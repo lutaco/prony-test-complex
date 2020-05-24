@@ -88,7 +88,9 @@ class Solver(object):
             print(f"Решенено {current_iter} / {self.count_documents}\t",
                   f"Самостоятельно {self.self_calculate_iterations}/{self.prognosis_period}"
                   f"Примерное время окончания {t_end}\t"
-                  f"Среднее время {round(average(self.times), 4)}")
+                  f"Среднее время {round(average(self.times), 4)}"
+                  f"Запись от {datetime.now().strftime('%H:%M')}"
+                  )
         self.self_calculate_iterations = 0
 
     def step_pipeline(self, options):
@@ -122,7 +124,13 @@ class Solver(object):
         options = None
         print('start solution')
         try:
-            for options in self.base[self.solution['schedule']].find({'processed': False}):
+            collection = self.base[self.solution['schedule']]
+            while True:
+                options = collection({'processed': False}, {'$set': {'processed': None}})
+
+                if options is None:
+                    print('End Solution')
+                    return
 
                 start_time = time.time()
                 self.base[self.solution['schedule']].update(*self.step_pipeline(options))
@@ -135,5 +143,3 @@ class Solver(object):
                 self.base[self.solution['schedule']].update(
                     {'_id': options['_id']}, {'$set': {'processed': False}})
             print('stop')
-        else:
-            print('End Solution')
