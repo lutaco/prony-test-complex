@@ -49,7 +49,7 @@ class StepCache(object):
 
 class Solver(object):
 
-    prognosis_period = 10
+    prognosis_period = 20
 
     def __init__(self, solution):
 
@@ -84,13 +84,13 @@ class Solver(object):
 
     def prognosis(self, current_iter):
         d_time = int((self.count_documents - current_iter) * average(self.times))
-        t_end = (datetime.now() + timedelta(seconds=d_time)).strftime('%H:%M')
+        t_end = (datetime.now() + timedelta(seconds=d_time)).strftime('d% %H:%M')
         if (current_iter - self.last_prognosis) > self.prognosis_period:
             print(f"Решенено {current_iter} / {self.count_documents}\t",
                   f"Самостоятельно {self.self_calculate_iterations}/{self.prognosis_period}\t"
                   f"Примерное окончание {t_end}\t"
                   f"Среднее время {round(average(self.times), 4)}\t"
-                  f"[{datetime.now().strftime('%H:%M:%S')}]"
+                  f"[{datetime.now().strftime('%d %H:%M:%S')}]"
                   )
             self.self_calculate_iterations = 0
             self.last_prognosis = current_iter
