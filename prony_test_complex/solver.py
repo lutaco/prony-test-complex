@@ -91,7 +91,7 @@ class Solver(object):
                   f"Среднее время {round(average(self.times), 4)}\t"
                   f"[{datetime.now().strftime('%H:%M:%S')}]"
                   )
-        self.self_calculate_iterations = 0
+            self.self_calculate_iterations = 0
 
     def step_pipeline(self, options):
 
