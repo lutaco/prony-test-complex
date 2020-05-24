@@ -25,14 +25,14 @@ if BUILD and input('Начать новый расчет? [Y/n]: ').lower() == '
     test_builder.add_steps([
         signals.OneSimpleTestSignal(),
         steps.CreateSignal(),
-        steps.Noise(np.linspace(0.0, 0.3, 10), cached=[steps.Noise]),
-        steps.Decimation((6, 7, 8)),
+        steps.Noise(np.linspace(0.0, 0.15, 31), cached=[steps.Noise]),
+        steps.Decimation((1, 2, 3, 4, 5, 6, 7, 8)),
         steps.Filters([
             ('empty', scortcuts.empty_filter),
             ('wiener', scortcuts.win_filter),
             ('butter', scortcuts.but_filter),
         ], cached=[steps.Noise, steps.Decimation]),
-        steps.ComponentsCount(np.linspace(1, 100, 20)),
+        steps.ComponentsCount(np.linspace(1, 100, 49)),
         steps.Computing([
             ('ls', scortcuts.ls),
             ('mpm', scortcuts.mpm)
