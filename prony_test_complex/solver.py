@@ -83,11 +83,12 @@ class Solver(object):
         )
 
     def prognosis(self, current_iter):
+        iteration_delta = current_iter - self.last_prognosis
         d_time = int((self.count_documents - current_iter) * average(self.times))
         t_end = (datetime.now() + timedelta(seconds=d_time)).strftime('%d %H:%M')
         if (current_iter - self.last_prognosis) > self.prognosis_period:
             print(f"Решенено {current_iter} / {self.count_documents}\t",
-                  f"Самостоятельно {self.self_calculate_iterations}/{self.prognosis_period}\t"
+                  f"Самостоятельно {self.self_calculate_iterations}/{iteration_delta}\t"
                   f"Примерное окончание {t_end}\t"
                   f"Среднее время {round(average(self.times), 4)}\t"
                   f"[{datetime.now().strftime('%d %H:%M:%S')}]"
