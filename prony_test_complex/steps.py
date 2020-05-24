@@ -120,7 +120,7 @@ class Computing(EasyParametersMixin, RangeStep):
 
             result = pickle.loads(
                 params['approximate'])(signal[np.newaxis].transpose(), int(p), 1 / data['fs'])
-        except (np.linalg.LinAlgError, IOError):
+        except (np.linalg.LinAlgError, IOError, ValueError):
             result = None
 
         return {'success': bool(result), 'result': None if not result else {
