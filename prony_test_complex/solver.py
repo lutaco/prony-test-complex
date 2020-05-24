@@ -126,7 +126,8 @@ class Solver(object):
         try:
             collection = self.base[self.solution['schedule']]
             while True:
-                options = collection({'processed': False}, {'$set': {'processed': None}})
+                options = collection.find_one_and_update(
+                    {'processed': False}, {'$set': {'processed': None}})
 
                 if options is None:
                     print('End Solution')
