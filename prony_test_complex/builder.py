@@ -1,5 +1,7 @@
+import pymongo
+
 from itertools import product, count
-from .clien import client
+from .settings import client
 
 
 class Builder(object):
@@ -10,6 +12,8 @@ class Builder(object):
         self.steps = []
         self.steps_parameters = {}
         self.settings = settings or {}
+        for x in self.db.collection_names():
+            self.db.drop_collection(x)
 
     def add_step(self, step):
         self.steps.append(step)
@@ -27,6 +31,9 @@ class Builder(object):
                 step_settings.update({'cached': tuple(x.representative for x in step.cached)})
 
             self.steps_parameters[step.representative] = collection_name
+
+            cache_name = f"cache_{step.representative}"
+            self.db[cache_name].create_index([('set_key', pymongo.ASCENDING)], unique=True)
 
         return step_settings
 

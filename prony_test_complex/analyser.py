@@ -2,7 +2,7 @@ import json
 import numpy as np
 from collections import namedtuple
 from itertools import zip_longest
-from .clien import client
+from .settings import client
 
 
 ALL_TYPE = 'ALL_TYPE'

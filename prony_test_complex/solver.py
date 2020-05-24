@@ -1,13 +1,14 @@
 import json
-from importlib import import_module
 import time
 import pickle
-from itertools import count
+
+from pymongo.errors import DuplicateKeyError
+from importlib import import_module
 from collections import deque, defaultdict
 from functools import reduce
 from numpy import average
 from datetime import datetime, timedelta
-from .clien import client
+from .settings import client
 
 
 class StepCache(object):
@@ -25,7 +26,7 @@ class StepCache(object):
         if key in self.cache[name]:
             return self.cache[name][key]
 
-        record = self.base[name].find_one({'key': dict(key)})
+        record = self.base[name].find_one({'set_key': dict(key)})
         if record:
             res = pickle.loads(record['value'])
             self.cache[name][key] = res
@@ -37,8 +38,11 @@ class StepCache(object):
     def commit(self, value):
         if self.cur_step_key:
             key, name = self.cur_step_key
-            self.base[name].insert_one({'key': dict(key), 'value': pickle.dumps(value)})
-            self.cache[name][key] = value
+            try:
+                self.base[name].insert_one(
+                    {'set_key': dict(key), 'value': pickle.dumps(value)})
+            except DuplicateKeyError:
+                print('Duplicate key')
 
         self.cur_step_key = None
 
@@ -59,8 +63,6 @@ class Solver(object):
             parameter: {x['_id']: x for x in client[solution['base']][collection].find({})}
             for parameter, collection in solution['steps_parameters'].items()
         }
-        self.current_iter = count(
-            self.base[solution['schedule']].count_documents({'processed': True}))
 
         self.pipeline = [
             {**action, 'action': self.step_loader(*action['action'])}
@@ -78,8 +80,7 @@ class Solver(object):
             {'processed': None}, {'$set': {'processed': False}}
         )
 
-    def prognosis(self):
-        current_iter = next(self.current_iter)
+    def prognosis(self, current_iter):
         d_time = int((self.count_documents - current_iter) * average(self.times))
         t_end = (datetime.now() + timedelta(seconds=d_time)).strftime('%H:%M')
         if current_iter % self.prognosis_period == 0:
@@ -123,7 +124,7 @@ class Solver(object):
                 start_time = time.time()
                 self.base[self.solution['schedule']].update(*self.step_pipeline(options))
                 self.times.append(time.time() - start_time)
-                self.prognosis()
+                self.prognosis(options['_id'])
 
         except KeyboardInterrupt:
             if options:

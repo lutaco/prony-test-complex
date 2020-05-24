@@ -1,0 +1,87 @@
+{
+    "base": "db1",
+    "schedule": "collection_schedule",
+    "steps": [
+        {
+            "action": [
+                "prony_test_complex.signals",
+                "OneSimpleTestSignal"
+            ]
+        },
+        {
+            "action": [
+                "prony_test_complex.steps",
+                "CreateSignal"
+            ]
+        },
+        {
+            "action": [
+                "prony_test_complex.steps",
+                "Noise"
+            ],
+            "required_parameter": "snr",
+            "cached": [
+                "snr"
+            ]
+        },
+        {
+            "action": [
+                "prony_test_complex.steps",
+                "Decimation"
+            ],
+            "required_parameter": "step"
+        },
+        {
+            "action": [
+                "prony_test_complex.steps",
+                "Filters"
+            ],
+            "required_parameter": "filter",
+            "cached": [
+                "snr",
+                "step"
+            ]
+        },
+        {
+            "action": [
+                "prony_test_complex.steps",
+                "ComponentsCount"
+            ],
+            "required_parameter": "p"
+        },
+        {
+            "action": [
+                "prony_test_complex.steps",
+                "Computing"
+            ],
+            "required_parameter": "method"
+        },
+        {
+            "action": [
+                "prony_test_complex.steps",
+                "Epsilon"
+            ]
+        },
+        {
+            "action": [
+                "prony_test_complex.steps",
+                "Save"
+            ]
+        }
+    ],
+    "parameters": {
+        "range": [
+            0.2,
+            0.5
+        ],
+        "fs": 18000,
+        "ex_fs": 1500
+    },
+    "steps_parameters": {
+        "snr": "collection_snr",
+        "step": "collection_step",
+        "filter": "collection_filter",
+        "p": "collection_p",
+        "method": "collection_method"
+    }
+}
