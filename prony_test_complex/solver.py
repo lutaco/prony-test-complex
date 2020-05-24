@@ -86,10 +86,10 @@ class Solver(object):
         t_end = (datetime.now() + timedelta(seconds=d_time)).strftime('%H:%M')
         if current_iter % self.prognosis_period == 0:
             print(f"Решенено {current_iter} / {self.count_documents}\t",
-                  f"Самостоятельно {self.self_calculate_iterations}/{self.prognosis_period}"
-                  f"Примерное время окончания {t_end}\t"
-                  f"Среднее время {round(average(self.times), 4)}"
-                  f"Запись от {datetime.now().strftime('%H:%M')}"
+                  f"Самостоятельно {self.self_calculate_iterations}/{self.prognosis_period}\t"
+                  f"Примерное окончание {t_end}\t"
+                  f"Среднее время {round(average(self.times), 4)}\t"
+                  f"[{datetime.now().strftime('%H:%M:%S')}]"
                   )
         self.self_calculate_iterations = 0
 
