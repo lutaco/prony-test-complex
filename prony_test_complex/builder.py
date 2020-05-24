@@ -12,8 +12,6 @@ class Builder(object):
         self.steps = []
         self.steps_parameters = {}
         self.settings = settings or {}
-        for x in self.db.collection_names():
-            self.db.drop_collection(x)
 
     def add_step(self, step):
         self.steps.append(step)
