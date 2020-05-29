@@ -29,7 +29,10 @@ class Analyser(object):
 
         result = np.empty([len(list(x)) for x in all_params], object)
         for row in data:
-            result[tuple(map(lambda i: row[i], all_params_names))] = row['result']
+            try:
+                result[tuple(map(lambda i: row[i], all_params_names))] = row['result']
+            except KeyError:
+                print(row)
 
         return result.tolist()
 

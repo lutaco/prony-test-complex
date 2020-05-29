@@ -96,6 +96,19 @@ class Decimation(EasyParametersMixin, RangeStep):
         }
 
 
+class SDecimation(EasyParametersMixin, RangeStep):
+
+    representative = 'step'
+
+    @classmethod
+    def step(cls, data, params):
+        new_fs = data['fs'] / params['step']
+        return {
+            'signal': data['signal'][::params['step']],
+            'new_fs': new_fs
+        }
+
+
 class ComponentsCount(EasyParametersMixin, RangeStep):
 
     representative = 'p'
@@ -103,6 +116,38 @@ class ComponentsCount(EasyParametersMixin, RangeStep):
     @classmethod
     def step(cls, data, params):
         return {'p': params['p']}
+
+
+class SComputing(EasyParametersMixin, RangeStep):
+    representative = 's_method'
+
+    @classmethod
+    def step(cls, data, params):
+        try:
+            signal = data['signal']
+
+            p = data['p']
+            if data.get('relative', False):
+                p = int(data['p'] * len(signal) // 200)
+
+            params, restore_method = pickle.loads(
+                params['approximate'])(signal[np.newaxis].transpose(), p, 1 / data['new_fs'])
+
+            restore = restore_method(*params, len(data['source']), 1 / data['fs'])
+            success = True
+
+        except (np.linalg.LinAlgError, IOError, ValueError):
+            success, restore = None, None
+
+        return {'success': bool(success), 'result': None if not success else {
+            'params': params, 'restore': restore
+        }}
+
+    def get_parameters(self):
+        return (
+            {'method': name, 'approximate': pickle.dumps(method)}
+            for name, method in self.parameters
+        )
 
 
 class Computing(EasyParametersMixin, RangeStep):

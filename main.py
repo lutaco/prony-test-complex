@@ -7,7 +7,7 @@ from prony_test_complex.solver import Solver
 
 BUILD = True
 
-BASE_NAME = 'db1'
+BASE_NAME = 'db2'
 FILE_NAME = f'{BASE_NAME}.json'
 
 
@@ -19,22 +19,22 @@ def eps_filter(x):
 if BUILD and input('Начать новый расчет? [Y/n]: ').lower() == 'y':
 
     test_builder = builder.Builder(
-        BASE_NAME, {'range': [0.2, 0.5], 'fs': 18000, 'ex_fs': 1500, 'relative': True}
+        BASE_NAME, {'range': [0.5, 0.8], 'fs': 18000, 'ex_fs': 1500, 'relative': True}
     )
 
     test_builder.add_steps([
-        signals.OneSimpleTestSignal(),
+        signals.TwoSimpleTestSignal(),
         steps.CreateSignal(),
         steps.Noise(np.linspace(0.0, 0.15, 31), cached=[steps.Noise]),
-        steps.Decimation((1, 2, 3, 4, 5, 6, 7, 8)),
+        steps.SDecimation((1, 2, 3, 4, 5, 6, 7, 8)),
         steps.Filters([
             ('empty', scortcuts.empty_filter),
             ('wiener', scortcuts.win_filter),
-            ('butter', scortcuts.but_filter),
-        ], cached=[steps.Noise, steps.Decimation]),
+            ('butter', scortcuts.s_but_filter),
+        ], cached=[steps.Noise, steps.SDecimation]),
         steps.ComponentsCount(np.linspace(1, 100, 49)),
-        steps.Computing([
-            ('ls', scortcuts.ls),
+        steps.SComputing([
+            ('ls', scortcuts.s_ls),
             ('mpm', scortcuts.mpm)
         ]),
         steps.Epsilon(),

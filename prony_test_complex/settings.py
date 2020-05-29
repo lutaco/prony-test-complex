@@ -10,7 +10,7 @@ url = 'mongodb://{user}:{pw}@{hosts}/?replicaSet={rs}&authSource={auth_src}'.for
         'rc1b-h1swq8ccd8dq6490.mdb.yandexcloud.net:27018'
     ]),
     rs='rs01',
-    auth_src='db1')
+    auth_src='db2')
 
 client = pymongo.MongoClient(
     url,
