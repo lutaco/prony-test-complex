@@ -35,7 +35,7 @@ if BUILD and input('Начать новый расчет? [Y/n]: ').lower() == '
         steps.ComponentsCount(np.linspace(1, 100, 49)),
         steps.SComputing([
             ('ls', scortcuts.s_ls),
-            ('mpm', scortcuts.mpm)
+            ('mpm', scortcuts.s_mpm)
         ]),
         steps.Epsilon(),
         steps.Save()
