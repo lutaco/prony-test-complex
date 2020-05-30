@@ -27,7 +27,7 @@
         {
             "action": [
                 "prony_test_complex.steps",
-                "Decimation"
+                "SDecimation"
             ],
             "required_parameter": "step"
         },
@@ -39,7 +39,8 @@
             "required_parameter": "filter",
             "cached": [
                 "snr",
-                "step"
+                "step",
+                "filter"
             ]
         },
         {
@@ -52,9 +53,9 @@
         {
             "action": [
                 "prony_test_complex.steps",
-                "Computing"
+                "SComputing"
             ],
-            "required_parameter": "method"
+            "required_parameter": "s_method"
         },
         {
             "action": [
@@ -75,13 +76,14 @@
             0.5
         ],
         "fs": 18000,
-        "ex_fs": 1500
+        "ex_fs": 1500,
+        "relative": true
     },
     "steps_parameters": {
         "snr": "collection_snr",
         "step": "collection_step",
         "filter": "collection_filter",
         "p": "collection_p",
-        "method": "collection_method"
+        "s_method": "collection_s_method"
     }
 }
