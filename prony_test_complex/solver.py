@@ -98,8 +98,8 @@ class Solver(object):
               f"{current_iter}/{self.count_documents}".ljust(w),
               f"самостоятельно: "
               f"{self.self_calculate_iterations}/{iteration_delta}".ljust(w2),
-              f"заврешится: {t_end}"
-              f"среднее: {round(avg_time, 4):^10}\t"
+              f"заврешится: {t_end:15}"
+              f"среднее: {round(avg_time, 4):<10}"
               f"[{datetime.now().strftime('%d %b %H:%M')}]"
               )
         self.self_calculate_iterations = 0
