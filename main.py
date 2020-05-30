@@ -19,7 +19,7 @@ def eps_filter(x):
 if BUILD and input('Начать новый расчет? [Y/n]: ').lower() == 'y':
 
     test_builder = builder.Builder(
-        BASE_NAME, {'range': [0.2, 0.5], 'fs': 18000, 'ex_fs': 1500, 'relative': True}
+        BASE_NAME, {'range': [0.2, 0.5], 'fs': 18000, 'ex_fs': 1100, 'relative': True}
     )
 
     test_builder.add_steps([

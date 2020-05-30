@@ -76,7 +76,7 @@
             0.5
         ],
         "fs": 18000,
-        "ex_fs": 1500,
+        "ex_fs": 1100,
         "relative": true
     },
     "steps_parameters": {

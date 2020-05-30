@@ -92,10 +92,14 @@ class Solver(object):
         d_time = int((self.count_documents - current_iter) * avg_time)
         t_end = (datetime.now() + timedelta(seconds=d_time)).strftime('%d %b %H:%M')
 
-        print(f"total_sol: {current_iter}/{self.count_documents}\t",
-              f"self_sol: {self.self_calculate_iterations}/{iteration_delta}\t"
-              f"time_end: {t_end}\t"
-              f"avg_time: {round(avg_time, 4)}\t"
+        w = len(str(self.count_documents)) * 2 + 4
+        w2 = len(str(self.prognosis_period)) * 2 + 4
+        print(f"решено: "
+              f"{current_iter}/{self.count_documents}".ljust(w),
+              f"самостоятельно: "
+              f"{self.self_calculate_iterations}/{iteration_delta}".ljust(w2),
+              f"заврешится: {t_end}"
+              f"среднее: {round(avg_time, 4):^10}\t"
               f"[{datetime.now().strftime('%d %b %H:%M')}]"
               )
         self.self_calculate_iterations = 0
