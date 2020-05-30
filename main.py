@@ -7,7 +7,7 @@ from prony_test_complex.solver import Solver
 
 BUILD = True
 
-BASE_NAME = 'db10local'
+BASE_NAME = 'db1'
 FILE_NAME = f'{BASE_NAME}.json'
 
 
