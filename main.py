@@ -5,7 +5,7 @@ from prony_test_complex import builder, steps, signals, scortcuts
 from prony_test_complex.solver import Solver
 
 
-BUILD = True
+BUILD = False
 
 BASE_NAME = 'db1'
 FILE_NAME = f'{BASE_NAME}.json'
