@@ -70,7 +70,7 @@ class Solver(object):
         ]
         self.cache = StepCache(self.base)
         self.last_prognosis = 0
-        self.last_prognosis_time = 0
+        self.last_prognosis_time = time.time()
 
     @staticmethod
     def step_loader(m_path, class_name):
@@ -90,13 +90,13 @@ class Solver(object):
         avg_time = (time.time() - self.last_prognosis_time) / iteration_delta
 
         d_time = int((self.count_documents - current_iter) * avg_time)
-        t_end = (datetime.now() + timedelta(seconds=d_time)).strftime('%d %H:%M')
+        t_end = (datetime.now() + timedelta(seconds=d_time)).strftime('%d %b %H:%M')
 
-        print(f"total sol: {current_iter} / {self.count_documents}\t",
-              f"self sol: {self.self_calculate_iterations}/{iteration_delta}\t"
-              f"time end: {t_end}\t"
-              f"avg time: {round(avg_time, 4)}\t"
-              f"[{datetime.now().strftime('%d %H:%M:%S')}]"
+        print(f"total_sol: {current_iter}/{self.count_documents}\t",
+              f"self_sol: {self.self_calculate_iterations}/{iteration_delta}\t"
+              f"time_end: {t_end}\t"
+              f"avg_time: {round(avg_time, 4)}\t"
+              f"[{datetime.now().strftime('%d %b %H:%M')}]"
               )
         self.self_calculate_iterations = 0
         self.last_prognosis = current_iter
