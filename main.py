@@ -7,7 +7,7 @@ from prony_test_complex.solver import Solver
 
 BUILD = True
 
-BASE_NAME = 'db2'
+BASE_NAME = 'db10local'
 FILE_NAME = f'{BASE_NAME}.json'
 
 
@@ -31,7 +31,7 @@ if BUILD and input('Начать новый расчет? [Y/n]: ').lower() == '
             ('empty', scortcuts.empty_filter),
             ('wiener', scortcuts.win_filter),
             ('butter', scortcuts.s_but_filter),
-        ], cached=[steps.Noise, steps.SDecimation]),
+        ], cached=[steps.Noise, steps.SDecimation, steps.Filters]),
         steps.ComponentsCount(np.linspace(1, 100, 49)),
         steps.SComputing([
             ('ls', scortcuts.s_ls),
