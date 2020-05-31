@@ -7,7 +7,7 @@ url = 'mongodb://{user}:{pw}@{hosts}/?replicaSet={rs}&authSource={auth_src}'.for
     user=quote('user1'),
     pw=quote('1879781482999919952'),
     hosts=','.join([
-        'rc1b-h1swq8ccd8dq6490.mdb.yandexcloud.net:27018'
+        'rc1b-7xf231nb2j7ewun5.mdb.yandexcloud.net:27018'
     ]),
     rs='rs01',
     auth_src='db1')

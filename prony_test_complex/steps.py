@@ -199,7 +199,6 @@ class Save(Step):
     def step(cls, data):
         return {'log': None if not data['success'] else {
             'eps': data['eps'],
-            'restore': data['result']['restore'].dumps(),
             'signal': data['signal'].dumps(),
             'params': list(map(lambda x: x.dumps(), data['result']['params'])),
         }}

@@ -19,14 +19,14 @@ def eps_filter(x):
 if BUILD and input('Начать новый расчет? [Y/n]: ').lower() == 'y':
 
     test_builder = builder.Builder(
-        BASE_NAME, {'range': [0.2, 0.5], 'fs': 18000, 'ex_fs': 1100, 'relative': True}
+        BASE_NAME, {'range': [0.2, 0.5], 'fs': 16000, 'ex_fs': 1100, 'relative': True}
     )
 
     test_builder.add_steps([
         signals.OneSimpleTestSignal(),
         steps.CreateSignal(),
         steps.Noise(np.linspace(0.0, 0.15, 31), cached=[steps.Noise]),
-        steps.SDecimation((1, 2, 3, 4, 5, 6, 7, 8)),
+        steps.SDecimation((1, 3, 5, 7)),
         steps.Filters([
             ('empty', scortcuts.empty_filter),
             ('wiener', scortcuts.win_filter),
