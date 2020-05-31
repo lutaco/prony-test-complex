@@ -137,7 +137,7 @@ class SComputing(EasyParametersMixin, RangeStep):
             restore = restore_method(*params, len(data['source']), 1 / data['fs'])
             success = True
 
-        except (np.linalg.LinAlgError, IOError, ValueError):
+        except (np.linalg.LinAlgError, IOError, ValueError, RuntimeWarning):
             success, restore = None, None
 
         return {'success': bool(success), 'result': None if not success else {
