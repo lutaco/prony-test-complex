@@ -1,4 +1,6 @@
 import numpy as np
+from functools import reduce
+from itertools import starmap, repeat
 
 
 def prony_restore_values(amp, alpha, freq, theta, size, ts):
@@ -11,6 +13,16 @@ def prony_restore_values(amp, alpha, freq, theta, size, ts):
     ))
 
     return np.diag(y)
+
+
+def quick_prony_restore_values(amp, alpha, freq, theta, size, ts):
+
+    t = np.linspace(0, size * ts, size, endpoint=False)
+
+    def exp_signal(amp_, alpha_, freq_, theta_):
+        return amp_ * np.exp(alpha_ * t) * np.cos(2 * np.pi * t * freq_ + theta_)
+
+    return sum(starmap(exp_signal, zip(amp, alpha, freq, theta)))
 
 
 def prony_lowpass_filter(amp, alpha, freq, theta, n_comp):

@@ -4,9 +4,8 @@ import pickle
 
 from pymongo.errors import DuplicateKeyError
 from importlib import import_module
-from collections import deque, defaultdict
+from collections import defaultdict
 from functools import reduce
-from numpy import average
 from datetime import datetime, timedelta
 from .settings import client
 
@@ -69,9 +68,9 @@ class Solver(object):
             {**action, 'action': self.step_loader(*action['action'])}
             for action in solution['steps']
         ]
-        self.times = deque(maxlen=self.prognosis_period)
         self.cache = StepCache(self.base)
         self.last_prognosis = 0
+        self.last_prognosis_time = time.time()
 
     @staticmethod
     def step_loader(m_path, class_name):
@@ -83,18 +82,27 @@ class Solver(object):
         )
 
     def prognosis(self, current_iter):
+
+        if (current_iter - self.last_prognosis) < self.prognosis_period:
+            return
+
         iteration_delta = current_iter - self.last_prognosis
-        d_time = int((self.count_documents - current_iter) * average(self.times))
-        t_end = (datetime.now() + timedelta(seconds=d_time)).strftime('%d %H:%M')
-        if (current_iter - self.last_prognosis) > self.prognosis_period:
-            print(f"Решенено {current_iter} / {self.count_documents}\t",
-                  f"Самостоятельно {self.self_calculate_iterations}/{iteration_delta}\t"
-                  f"Примерное окончание {t_end}\t"
-                  f"Среднее время {round(average(self.times), 4)}\t"
-                  f"[{datetime.now().strftime('%d %H:%M:%S')}]"
-                  )
-            self.self_calculate_iterations = 0
-            self.last_prognosis = current_iter
+        avg_time = (time.time() - self.last_prognosis_time) / iteration_delta
+
+        d_time = int((self.count_documents - current_iter) * avg_time)
+        t_end = (datetime.now() + timedelta(seconds=d_time)).strftime('%d %b %H:%M')
+
+        print(f"решено: "
+              f"{current_iter}/{self.count_documents}".ljust(20),
+              f"самостоятельно: "
+              f"{self.self_calculate_iterations}/{iteration_delta}".ljust(15),
+              f"заврешится: {t_end:15}"
+              f"среднее: {round(avg_time, 4):<10}"
+              f"[{datetime.now().strftime('%d %b %H:%M')}]"
+              )
+        self.self_calculate_iterations = 0
+        self.last_prognosis = current_iter
+        self.last_prognosis_time = time.time()
 
     def step_pipeline(self, options):
 
@@ -136,9 +144,7 @@ class Solver(object):
                     print('End Solution')
                     return
 
-                start_time = time.time()
                 self.base[self.solution['schedule']].update(*self.step_pipeline(options))
-                self.times.append(time.time() - start_time)
                 self.self_calculate_iterations += 1
                 self.prognosis(options['_id'])
 
