@@ -17,14 +17,14 @@ class Analyser(object):
         self.solution = json.loads(solution)
         self.base = client[self.solution['base']]
 
-    def aggregate(self, *params, res_filter=()):
+    def aggregate(self, *params, res_filter=('result', )):
 
         all_params = [x.parameter for x in params if x.type == ALL_TYPE]
         all_params_names = [x.name for x in all_params]
 
         query = {x.parameter.name: x.data for x in params if x.type == FIXED_TYPE}
         data = self.base[self.solution['schedule']].find(
-            query, projection=all_params_names + res_filter
+            query, projection=tuple(all_params_names) + tuple(res_filter)
         )
 
         result = np.empty([len(list(x)) for x in all_params], object)
