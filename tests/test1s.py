@@ -9,7 +9,7 @@ FILE_NAME = f'../solutions/{BASE_NAME}.json'
 if input('Начать новый расчет? [Y/n]: ').lower() == 'y':
 
     test_builder = builder.Builder(
-        BASE_NAME, {'range': [0.2, 0.5], 'fs': 16000, 'relative': True}
+        BASE_NAME, {'range': [0.2, 0.5], 'fs': 20000, 'relative': True}
     )
 
     test_builder.add_steps([
