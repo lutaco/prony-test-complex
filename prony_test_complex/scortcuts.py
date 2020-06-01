@@ -41,3 +41,8 @@ def but_filter(data):
 def s_but_filter(data):
     sig = data['signal']
     return sc_signal.filtfilt(*sc_signal.butter(5, data['ex_fs'], 'low', fs=data['new_fs']), sig)
+
+
+def s_win_filter(data):
+    sig = data['signal']
+    return sc_signal.wiener(sig, noise=1/data['new_fs'])
