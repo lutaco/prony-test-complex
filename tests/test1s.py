@@ -19,7 +19,7 @@ if input('Начать новый расчет? [Y/n]: ').lower() == 'y':
         steps.Filters([
             ('empty', scortcuts.empty_filter),
             ('wiener', scortcuts.win_filter),
-            ('batter', scortcuts.but_filter),
+            ('batter', scortcuts.x_but_filter),
         ]),
         steps.SDecimation((2, 3, 5, 7)),
         steps.ComponentsCount(np.linspace(1, 99, 49)),
