@@ -9,19 +9,20 @@ FILE_NAME = f'../solutions/{BASE_NAME}.json'
 if input('Начать новый расчет? [Y/n]: ').lower() == 'y':
 
     test_builder = builder.Builder(
-        BASE_NAME, {'range': [0.2, 0.5], 'fs': 20000, 'relative': True}
+        BASE_NAME, {'range': [0.0, 0.3], 'fs': 40000, 'ex_fs': 10000, 'relative': True}
     )
 
     test_builder.add_steps([
-        signals.OneSimpleTestSignal(),
+        signals.SOneSimpleTestSignal(),
         steps.CreateSignal(),
         steps.SNoise(np.linspace(0.0, 0.15, 31)),
-        steps.SDecimation((1, 3, 5, 7)),
         steps.Filters([
             ('empty', scortcuts.empty_filter),
-            ('wiener', scortcuts.s_win_filter),
+            ('wiener', scortcuts.win_filter),
+            ('batter', scortcuts.x_but_filter),
         ]),
-        steps.ComponentsCount(np.linspace(1, 100, 49)),
+        steps.SDecimation((2, 3, 5, 7)),
+        steps.ComponentsCount(np.linspace(1, 90, 49)),
         steps.SComputing([
             ('ls', scortcuts.s_ls),
             ('mpm', scortcuts.s_mpm)
