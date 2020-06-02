@@ -5,7 +5,7 @@
         {
             "action": [
                 "prony_test_complex.signals",
-                "OneSimpleTestSignal"
+                "SOneSimpleTestSignal"
             ]
         },
         {
@@ -24,16 +24,16 @@
         {
             "action": [
                 "prony_test_complex.steps",
-                "SDecimation"
+                "Filters"
             ],
-            "required_parameter": "step"
+            "required_parameter": "filter"
         },
         {
             "action": [
                 "prony_test_complex.steps",
-                "Filters"
+                "SDecimation"
             ],
-            "required_parameter": "filter"
+            "required_parameter": "step"
         },
         {
             "action": [
@@ -64,16 +64,17 @@
     ],
     "parameters": {
         "range": [
-            0.2,
-            0.5
+            0.0,
+            0.3
         ],
-        "fs": 20000,
+        "fs": 40000,
+        "ex_fs": 10000,
         "relative": true
     },
     "steps_parameters": {
         "snr": "collection_snr",
-        "step": "collection_step",
         "filter": "collection_filter",
+        "step": "collection_step",
         "p": "collection_p",
         "s_method": "collection_s_method"
     }
