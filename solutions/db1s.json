@@ -68,8 +68,8 @@
             0.5
         ],
         "fs": 40000,
-        "ex_fs": 3000,
-        "bat_n": 3,
+        "ex_fs": 10000,
+        "bat_n": 1,
         "relative": true
     },
     "steps_parameters": {
