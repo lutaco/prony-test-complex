@@ -1,0 +1,82 @@
+{
+    "base": "db3s",
+    "schedule": "collection_schedule",
+    "steps": [
+        {
+            "action": [
+                "prony_test_complex.signals",
+                "SOneExpTestSignal"
+            ]
+        },
+        {
+            "action": [
+                "prony_test_complex.steps",
+                "CreateSignal"
+            ]
+        },
+        {
+            "action": [
+                "prony_test_complex.steps",
+                "SNoise"
+            ],
+            "required_parameter": "snr"
+        },
+        {
+            "action": [
+                "prony_test_complex.steps",
+                "Filters"
+            ],
+            "required_parameter": "filter"
+        },
+        {
+            "action": [
+                "prony_test_complex.steps",
+                "SDecimation"
+            ],
+            "required_parameter": "step"
+        },
+        {
+            "action": [
+                "prony_test_complex.steps",
+                "ComponentsCount"
+            ],
+            "required_parameter": "p"
+        },
+        {
+            "action": [
+                "prony_test_complex.steps",
+                "SComputing"
+            ],
+            "required_parameter": "s_method"
+        },
+        {
+            "action": [
+                "prony_test_complex.steps",
+                "Epsilon"
+            ]
+        },
+        {
+            "action": [
+                "prony_test_complex.steps",
+                "Save"
+            ]
+        }
+    ],
+    "parameters": {
+        "range": [
+            0.0,
+            0.5
+        ],
+        "fs": 40000,
+        "ex_fs": 10000,
+        "bat_n": 1,
+        "relative": true
+    },
+    "steps_parameters": {
+        "snr": "collection_snr",
+        "filter": "collection_filter",
+        "step": "collection_step",
+        "p": "collection_p",
+        "s_method": "collection_s_method"
+    }
+}

@@ -41,6 +41,15 @@ class OneExpTestSignal(Step):
         ])}
 
 
+class SOneExpTestSignal(Step):
+
+    @classmethod
+    def step(cls, data):
+        return {'start_signal': lambda t: sum_exp_signal([
+            (t, 3.5, -4.4, 1000, 0.4), (t, 1, 0.1, 1002, 1.1), (t, 2, -4.2, 1004, 0.8)
+        ])}
+
+
 class TwoExpTestSignal(Step):
 
     @classmethod
