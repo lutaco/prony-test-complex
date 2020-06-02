@@ -45,4 +45,5 @@ def s_but_filter(data):
 
 def x_but_filter(data):
     sig = data['signal']
-    return sc_signal.filtfilt(*sc_signal.butter(1, data['ex_fs'], 'low', fs=data['fs']), sig)
+    return sc_signal.filtfilt(*sc_signal.butter(data['bat_n'], data['ex_fs'], 'low', fs=data['fs']), sig)
+

@@ -64,11 +64,12 @@
     ],
     "parameters": {
         "range": [
-            0.0,
-            0.3
+            0.2,
+            0.5
         ],
         "fs": 40000,
-        "ex_fs": 10000,
+        "ex_fs": 3000,
+        "bat_n": 3,
         "relative": true
     },
     "steps_parameters": {
