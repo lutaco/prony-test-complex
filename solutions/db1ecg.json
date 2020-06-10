@@ -1,0 +1,48 @@
+{
+    "base": "db1ecg",
+    "schedule": "collection_schedule",
+    "steps": [
+        {
+            "action": [
+                "prony_test_complex.signals",
+                "LoadRealSignal"
+            ]
+        },
+        {
+            "action": [
+                "prony_test_complex.steps",
+                "Filters"
+            ],
+            "required_parameter": "filter"
+        },
+        {
+            "action": [
+                "prony_test_complex.steps",
+                "ComponentsCount"
+            ],
+            "required_parameter": "p"
+        },
+        {
+            "action": [
+                "prony_test_complex.steps",
+                "RComputing"
+            ],
+            "required_parameter": "s_method"
+        },
+        {
+            "action": [
+                "prony_test_complex.steps",
+                "RSave"
+            ]
+        }
+    ],
+    "parameters": {
+        "relative": true,
+        "file_name": "ecg_part1.tsv"
+    },
+    "steps_parameters": {
+        "filter": "collection_filter",
+        "p": "collection_p",
+        "s_method": "collection_s_method"
+    }
+}
