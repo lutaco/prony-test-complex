@@ -1,5 +1,21 @@
+import numpy as np
 from prony_test_complex.steps import Step
 from prony_test_complex.test_signal import sum_exp_signal
+
+
+class LoadRealSignal(Step):
+
+    @classmethod
+    def step(cls, data):
+        name = data['file_name']
+        with open(f'prony_test_complex/real_signals/{name}') as file:
+            file.readline()
+            fs = float(file.readline())
+            source = np.array(list(map(float, file)))
+        return {
+            'signal': source,
+            'fs': fs
+        }
 
 
 class OneSimpleTestSignal(Step):
