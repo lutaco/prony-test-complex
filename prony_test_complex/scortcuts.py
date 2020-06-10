@@ -30,12 +30,12 @@ def empty_filter(data):
 
 def win_filter(data):
     sig = data['signal']
-    return sc_signal.wiener(sig)
+    return sc_signal.wiener(sig, mysize=11)
 
 
 def but_filter(data):
     sig = data['signal']
-    return sc_signal.filtfilt(*sc_signal.butter(5, data['ex_fs'], 'low', fs=data['fs']), sig)
+    return sc_signal.filtfilt(*sc_signal.butter(8, 70, 'low', fs=data['fs']), sig)
 
 
 def s_but_filter(data):

@@ -1,7 +1,7 @@
 import json
 from prony_test_complex.solver import Solver
 
-BASE_NAME = 'db2scg'
+BASE_NAME = 'db3ecg'
 FILE_NAME = f'solutions/{BASE_NAME}.json'
 
 with open(FILE_NAME) as f:
