@@ -188,6 +188,35 @@ class Computing(EasyParametersMixin, RangeStep):
         )
 
 
+class RComputing(EasyParametersMixin, RangeStep):
+    representative = 's_method'
+
+    @classmethod
+    def step(cls, data, params):
+        try:
+            signal = data['signal']
+
+            p = data['p']
+            if data.get('relative', False):
+                p = int(data['p'] * len(signal) // 200)
+
+            params, restore_method = pickle.loads(
+                params['approximate'])(signal[np.newaxis].transpose(), p, 1 / data['fs'])
+
+            success = True
+
+        except (np.linalg.LinAlgError, IOError, ValueError, RuntimeWarning):
+            success, restore = None, None
+
+        return {'success': bool(success), 'result': None if not success else {'params': params}}
+
+    def get_parameters(self):
+        return (
+            {'method': name, 'approximate': pickle.dumps(method)}
+            for name, method in self.parameters
+        )
+
+
 class Epsilon(Step):
 
     @classmethod
@@ -208,5 +237,14 @@ class Save(Step):
         return {'log': None if not data['success'] else {
             'eps': data['eps'],
             'signal': data['signal'].dumps(),
+            'params': list(map(lambda x: x.dumps(), data['result']['params'])),
+        }}
+
+
+class RSave(Step):
+
+    @classmethod
+    def step(cls, data):
+        return {'log': None if not data['success'] else {
             'params': list(map(lambda x: x.dumps(), data['result']['params'])),
         }}
