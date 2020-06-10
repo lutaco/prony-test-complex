@@ -2,28 +2,27 @@ import json
 import numpy as np
 from prony_test_complex import builder, steps, signals, scortcuts
 
-
-BASE_NAME = 'db2'
-FILE_NAME = f'{BASE_NAME}.json'
+BASE_NAME = 'db3s'
+FILE_NAME = f'../solutions/{BASE_NAME}.json'
 
 
 if input('Начать новый расчет? [Y/n]: ').lower() == 'y':
 
     test_builder = builder.Builder(
-        BASE_NAME, {'range': [0.5, 0.8], 'fs': 16000, 'ex_fs': 1100, 'relative': True}
+        BASE_NAME, {'range': [0.0, 0.5], 'fs': 40000, 'ex_fs': 10000, 'bat_n': 1, 'relative': True}
     )
 
     test_builder.add_steps([
-        signals.TwoSimpleTestSignal(),
+        signals.SOneExpTestSignal(),
         steps.CreateSignal(),
-        steps.Noise(np.linspace(0.0, 0.15, 31), cached=[steps.Noise]),
-        steps.SDecimation((1, 3, 5, 7)),
+        steps.SNoise(np.linspace(0.0, 0.15, 31)),
         steps.Filters([
             ('empty', scortcuts.empty_filter),
             ('wiener', scortcuts.win_filter),
-            ('butter', scortcuts.s_but_filter),
-        ], cached=[steps.Noise, steps.SDecimation, steps.Filters]),
-        steps.ComponentsCount(np.linspace(1, 100, 49)),
+            ('batter', scortcuts.x_but_filter),
+        ]),
+        steps.SDecimation((4, 5, 8)),
+        steps.ComponentsCount(np.linspace(1, 99, 49)),
         steps.SComputing([
             ('ls', scortcuts.s_ls),
             ('mpm', scortcuts.s_mpm)
@@ -36,5 +35,3 @@ if input('Начать новый расчет? [Y/n]: ').lower() == 'y':
 
     with open(FILE_NAME, 'w') as f:
         json.dump(solution, f, indent=4)
-
-print('Задача успешно создана, файл решения ', FILE_NAME)

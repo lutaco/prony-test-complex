@@ -71,6 +71,14 @@ class Noise(EasyParametersMixin, RangeStep):
         return {'signal': res}
 
 
+class SNoise(Noise):
+
+    @classmethod
+    def step(cls, data, params):
+        np.random.seed(0)
+        return super().step(data, params)
+
+
 class Filters(EasyParametersMixin, RangeStep):
 
     representative = 'filter'

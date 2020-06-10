@@ -3,7 +3,7 @@ import numpy as np
 from prony_test_complex import builder, steps, signals, scortcuts
 
 BASE_NAME = 'db1'
-FILE_NAME = f'{BASE_NAME}.json'
+FILE_NAME = f'../solutions/{BASE_NAME}.json'
 
 
 if input('Начать новый расчет? [Y/n]: ').lower() == 'y':

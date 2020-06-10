@@ -27,11 +27,10 @@ class Builder(object):
             step_settings.update({'required_parameter': step.representative})
             if hasattr(step, 'cached'):
                 step_settings.update({'cached': tuple(x.representative for x in step.cached)})
+                cache_name = f"cache_{step.representative}"
+                self.db[cache_name].create_index([('set_key', pymongo.ASCENDING)], unique=True)
 
             self.steps_parameters[step.representative] = collection_name
-
-            cache_name = f"cache_{step.representative}"
-            self.db[cache_name].create_index([('set_key', pymongo.ASCENDING)], unique=True)
 
         return step_settings
 
